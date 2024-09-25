@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Nuevo Producto</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Crear Nuevo Producto</h1>
+    <form th:action="@{/products/create}" th:object="${product}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Nombre del Producto</label>
+            <input type="text" id="name" class="form-control" th:field="*{name}" required />
+        </div>
+        <div class="form-group">
+            <label for="image">Cargar Imagen</label>
+            <input type="file" id="image" class="form-control" th:field="*{imageFile}" accept="image/png" required />
+        </div>
+        <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea id="description" class="form-control" th:field="*{description}" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="stock">Stock</label>
+            <input type="number" id="stock" class="form-control" th:field="*{stock}" required />
+        </div>
+        <div class="form-group">
+            <label for="value">Valor</label>
+            <input type="number" id="value" class="form-control" th:field="*{value}" required />
+        </div>
+
+        <div class="form-group">
+            <label>Categorías</label>
+            <div th:each="category : ${categories}">
+                <div class="form-check">
+                    <input type="radio" class="form-check-input"
+                           th:id="'category_' + ${category.name}"
+                           th:value="${category.name}" th:field="*{categoryName}" />
+                    <label class="form-check-label" th:for="'category_' + ${category.name}"
+                           th:text="${category.name}"></label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a th:href="@{/products}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos de la Categoría</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Productos de la Categoría <span th:text="${category}"></span></h1>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="list-group">
+                <div th:each="product : ${products}">
+                    <div class="list-group-item">
+                        <h5 class="mb-1" th:text="${product.name}"></h5>
+                        <p class="mb-1" th:text="${product.description}"></p>
+                        <p class="mb-1">Precio: <span th:text="${product.value}"></span> COP</p>
+                        <p class="mb-1">Stock: <span th:text="${product.stock}"></span></p>
+                        <div>
+                            <span class="badge badge-primary"
+                                  th:text="${product.categoryDTO.name}"
+                                  th:attr="title=${product.categoryDTO.code}"></span>
+                        </div>
+                        <img th:src="@{${product.image}}" alt="Imagen de producto" class="img-fluid"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a th:href="@{/products/create}" class="btn btn-primary">Crear producto</a>
+        <a th:href="@{/index}" class="btn btn-secondary">Volver a Categorías</a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

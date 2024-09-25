@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Nueva Categoría</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Crear Nueva Categoría</h1>
+    <form th:action="@{/categories/create}" th:object="${category}" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+            <label for="name">Nombre de la Categoría</label>
+            <input type="text" id="name" class="form-control" th:field="*{name}" required />
+        </div>
+        <div class="form-group">
+            <label for="code">Código de la Categoría</label>
+            <input type="text" id="code" class="form-control" th:field="*{code}" required />
+        </div>
+        <div class="form-group">
+            <label for="image">Cargar Imagen</label>
+            <input type="file" id="image" class="form-control" th:field="*{imageFile}" accept="image/png" required />
+        </div>
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a th:href="@{/index}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

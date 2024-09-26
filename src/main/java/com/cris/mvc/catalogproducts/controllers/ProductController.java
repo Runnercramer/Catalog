@@ -8,6 +8,7 @@ import com.cris.mvc.catalogproducts.services.IImageService;
 import com.cris.mvc.catalogproducts.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -66,5 +67,29 @@ public class ProductController {
         List<ProductDTO> products = productService.getAllProducts();
         model.addAttribute("products", products);
         return "products";
+    }
+
+    @GetMapping("/products/update/{id}")
+    public String updateProductView(@PathVariable Long id, Model model){
+        model.addAttribute("product", productService.findById(id));
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("id", id);
+        return "edit-product";
+    }
+
+    @PostMapping("/products/update")
+    @Transactional
+    public String updateProduct(@ModelAttribute ProductDTO product,
+                                @RequestParam("imageFile") MultipartFile imageFile,
+                                @RequestParam Long categoryId){
+        product.setImage(this.imageService.saveImage(imageFile));
+        this.productService.updateProduct(product, categoryId);
+        return "redirect:/products";
+    }
+
+    @PostMapping("/products/delete/{id}")
+    public String deleteProduct(@PathVariable Long id){
+        productService.deleteProduct(id);
+        return "redirect:/products";
     }
 }

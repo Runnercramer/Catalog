@@ -23,6 +23,12 @@
                                 <span class="badge badge-primary"
                                       th:text="${product.categoryDTO.name}"></span>
                             </div>
+                            <div class="mt-3">
+                                <a th:href="@{/products/update/{id}(id=${product.id})}" class="btn btn-warning">Editar</a>
+                                <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">Eliminar</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

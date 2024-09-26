@@ -8,4 +8,7 @@ public interface IProductService {
     List<ProductDTO> findByCategoryName(String name);
     void createProduct(ProductDTO productDTO);
     List<ProductDTO> getAllProducts();
+    ProductDTO findById(Long id);
+    void updateProduct(ProductDTO productDTO, Long categoryId);
+    void deleteProduct(Long id);
 }

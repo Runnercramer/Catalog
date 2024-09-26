@@ -8,12 +8,14 @@ import com.cris.mvc.catalogproducts.repositories.ProductRepository;
 import com.cris.mvc.catalogproducts.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements IProductService {
 
     private ProductRepository productRepository;
@@ -38,6 +40,33 @@ public class ProductServiceImpl implements IProductService {
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
         return products.stream().map(this::mapToProductDTO).toList();
+    }
+
+    @Override
+    public ProductDTO findById(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        return product.map(this::mapToProductDTO).orElse(null);
+    }
+
+    @Override
+    public void updateProduct(ProductDTO productDTO, Long categoryId) {
+        Optional<Product> product = productRepository.findById(productDTO.getId());
+        if(product.isPresent()){
+            product.get().setName(productDTO.getName());
+            product.get().setDescription(productDTO.getDescription());
+            product.get().setValue(productDTO.getValue());
+            product.get().setStock(productDTO.getStock());
+            if (productDTO.getImage() != null) product.get().setImage(productDTO.getImage());
+
+            this.productRepository.updateCategory(product.get().getId(), categoryId);
+
+            productRepository.save(product.get());
+        }
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 
     private ProductDTO mapToProductDTO(Product product) {

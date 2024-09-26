@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface ICategoryService {
     boolean createCategory(CategoryDTO categoryDTO);
     List<CategoryDTO> findAll();
+    void updateCategory(CategoryDTO categoryDTO);
     CategoryDTO findById(Long id);
     CategoryDTO findByName(String name);
     CategoryDTO findByCode(String code);

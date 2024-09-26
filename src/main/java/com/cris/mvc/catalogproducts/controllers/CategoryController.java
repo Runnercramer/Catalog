@@ -48,4 +48,20 @@ public class CategoryController {
         return "redirect:/index";
     }
 
+    @GetMapping("/categories/edit/{name}")
+    public String editCategoryView(@PathVariable String name,
+                               Model model){
+        CategoryDTO category = categoryService.findByName(name);
+        model.addAttribute("category", category);
+        return "edit-category";
+    }
+
+    @PostMapping("/categories/edit")
+    public String editCategory(@ModelAttribute CategoryDTO category,
+                               @RequestParam("imageFile") MultipartFile imageFile){
+        category.setImage(this.imageService.saveImage(imageFile));
+        categoryService.updateCategory(category);
+        return "redirect:/index";
+    }
+
 }

@@ -35,6 +35,17 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
+    public void updateCategory(CategoryDTO categoryDTO) {
+        Optional<Category> existingCategory = categoryRepository.findById(categoryDTO.getId());
+        if(existingCategory.isPresent()){
+            existingCategory.get().setName(categoryDTO.getName());
+            existingCategory.get().setCode(categoryDTO.getCode());
+            if (categoryDTO.getImage() != null) existingCategory.get().setImage(categoryDTO.getImage());
+            categoryRepository.save(existingCategory.get());
+        }
+    }
+
+    @Override
     public CategoryDTO findById(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         return category.map(this::mapToCategoryDTO).orElse(null);

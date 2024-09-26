@@ -14,6 +14,7 @@
                 <div th:each="product : ${products}">
                     <div class="list-group-item">
                         <h5 class="mb-1" th:text="${product.name}"></h5>
+                        <img th:src="@{${product.image}}" alt="Imagen de producto" class="card-img-top product-image" style="max-width: 200px; height: auto;"/>
                         <p class="mb-1" th:text="${product.description}"></p>
                         <p class="mb-1">Precio: <span th:text="${product.value}"></span> COP</p>
                         <p class="mb-1">Stock: <span th:text="${product.stock}"></span></p>
@@ -22,7 +23,6 @@
                                   th:text="${product.categoryDTO.name}"
                                   th:attr="title=${product.categoryDTO.code}"></span>
                         </div>
-                        <img th:src="@{${product.image}}" alt="Imagen de producto" class="img-fluid"/>
                     </div>
                 </div>
             </div>

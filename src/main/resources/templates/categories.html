@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Productos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .fixed-bottom-right {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Catálogo de Productos</h1>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2>Categorías</h2>
+            <form th:action="@{/categories/search}" method="get" class="d-flex" style="width: 300px;">
+                <input type="text" name="query" class="form-control" placeholder="Buscar categorías" aria-label="Buscar categorías">
+                <button type="submit" class="btn btn-primary" style="margin-left: 5px;">Buscar</button>
+            </form>
+            <div class="list-group">
+                <div th:each="category, iterStat : ${categories}">
+                    <div th:if="${iterStat.index % 2 == 0}" class="d-flex justify-content-between align-items-center"
+                         style="margin:5px;">
+                        <a th:href="@{/products/categories/{name}(name=${#strings.toLowerCase(category.name)})}"
+                           class="list-group-item list-group-item-action">
+                            <span th:text="${category.name}"></span>
+                            <span th:text="' (' + ${category.productsAmount} + ' productos)'"></span>
+                        </a>
+                        <img th:src="@{${category.image}}" alt="Imagen de Categoría" class="img-fluid"
+                             style="max-width: 100px; height: auto;">
+                        <div>
+                            <a th:href="@{/categories/update/{name}(name=${#strings.toLowerCase(category.name)})}"
+                               class="btn btn-warning btn-sm" style="margin:3px;">Editar</a>
+                            <form th:action="@{/categories/delete/{id}(id=${category.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar la categoría?');">
+                                Eliminar
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+
+                    <div th:if="${iterStat.index % 2 != 0}" class="d-flex justify-content-between align-items-center"
+                         style="margin:5px;">
+                        <img th:src="@{${category.image}}" alt="Imagen de Categoría" class="img-fluid"
+                             style="max-width: 100px; height: auto;">
+
+                        <a th:href="@{/products/categories/{name}(name=${#strings.toLowerCase(category.name)})}"
+                           class="list-group-item list-group-item-action">
+                            <span th:text="${category.name}"></span>
+                            <span th:text="' (' + ${category.productsAmount} + ' productos)'"></span>
+                        </a>
+                        <div>
+                            <a th:href="@{/categories/update/{name}(name=${#strings.toLowerCase(category.name)})}"
+                               class="btn btn-warning btn-sm" style="margin:3px;">Editar</a>
+                            <form th:action="@{/categories/delete/{id}(id=${category.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar la categoría?');">
+                                Eliminar
+                                </button>
+                            </form>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="fixed-bottom-right">
+    <a th:href="@{/categories/create}" class="btn btn-primary">Crear Categoría</a>
+    <a th:href="@{/products}" class="btn bt-secondary">Productos</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

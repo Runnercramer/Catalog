@@ -20,4 +20,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("UPDATE product p SET p.category.id = :categoryId WHERE p.id = :productId")
     void updateCategory(@Param("productId") Long productId, @Param("categoryId") Long categoryId);
 
+    List<Product> findByNameContaining(String name);
+
 }

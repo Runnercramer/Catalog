@@ -48,20 +48,33 @@ public class CategoryController {
         return "redirect:/index";
     }
 
-    @GetMapping("/categories/edit/{name}")
-    public String editCategoryView(@PathVariable String name,
+    @GetMapping("/categories/update/{name}")
+    public String updateCategoryView(@PathVariable String name,
                                Model model){
         CategoryDTO category = categoryService.findByName(name);
         model.addAttribute("category", category);
         return "edit-category";
     }
 
-    @PostMapping("/categories/edit")
-    public String editCategory(@ModelAttribute CategoryDTO category,
+    @PostMapping("/categories/update")
+    public String updateCategory(@ModelAttribute CategoryDTO category,
                                @RequestParam("imageFile") MultipartFile imageFile){
         category.setImage(this.imageService.saveImage(imageFile));
         categoryService.updateCategory(category);
         return "redirect:/index";
+    }
+
+    @PostMapping("/categories/delete/{id}")
+    public String deleteCategory(@PathVariable Long id){
+        categoryService.deleteCategory(id);
+        return "redirect:/index";
+    }
+
+    @GetMapping("/categories/search")
+    public String searchCategory(@RequestParam("query") String query, Model model){
+        List<CategoryDTO> categories = categoryService.findByQuery(query);
+        model.addAttribute("categories", categories);
+        return "categories";
     }
 
 }

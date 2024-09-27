@@ -8,6 +8,10 @@
 <body>
 <div class="container mt-5">
     <h1 class="text-center">Productos</h1>
+    <form th:action="@{/products/search}" method="get" class="d-flex" style="width: 300px;">
+        <input type="text" name="query" class="form-control" placeholder="Buscar productos" aria-label="Buscar productos">
+        <button type="submit" class="btn btn-primary" style="margin-left: 5px;">Buscar</button>
+    </form>
     <div class="row mt-4">
         <div class="col-md-12">
             <div class="row">

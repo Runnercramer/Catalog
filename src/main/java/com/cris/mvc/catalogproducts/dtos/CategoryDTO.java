@@ -19,6 +19,7 @@ public class CategoryDTO {
     private Set<ProductDTO> products;
     private String image;
     private MultipartFile imageFile;
+    private Integer productsAmount;
 
     public String getName() {
         return name;
@@ -66,6 +67,14 @@ public class CategoryDTO {
 
     public void setImageFile(MultipartFile imageFile) {
         this.imageFile = imageFile;
+    }
+
+    public Integer getProductsAmount() {
+        return productsAmount;
+    }
+
+    public void setProductsAmount(Integer productsAmount) {
+        this.productsAmount = productsAmount;
     }
 
     @Override

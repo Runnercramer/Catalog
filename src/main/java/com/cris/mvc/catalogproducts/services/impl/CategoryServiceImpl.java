@@ -9,10 +9,14 @@ import com.cris.mvc.catalogproducts.services.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CategoryServiceImpl implements ICategoryService {
@@ -31,7 +35,13 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public List<CategoryDTO> findAll() {
         List<Category> categories = categoryRepository.findAll();
-        return categories.stream().map(this::mapToCategoryDTO).toList();
+        return categories.stream()
+                .map(category -> {
+                    CategoryDTO categoryDTO = mapToCategoryDTO(category);
+                    categoryDTO.setProductsAmount(categoryRepository.countProductsByCategory(category.getId()));
+                    return categoryDTO;
+                })
+                .toList();
     }
 
     @Override
@@ -43,6 +53,11 @@ public class CategoryServiceImpl implements ICategoryService {
             if (categoryDTO.getImage() != null) existingCategory.get().setImage(categoryDTO.getImage());
             categoryRepository.save(existingCategory.get());
         }
+    }
+
+    @Override
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
     }
 
     @Override
@@ -64,15 +79,39 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public List<CategoryDTO> findByNameContaining(String name) {
-        Optional<List<Category>> categories = categoryRepository.findByNameContaining(name);
-        return categories.map(categoryList -> categoryList.stream().map(this::mapToCategoryDTO).toList()).orElse(null);
+    public List<CategoryDTO> findByQuery(String query) {
+        List<CategoryDTO> categoriesByName = this.findByNameContaining(query);
+        List<CategoryDTO> categoriesByCode = this.findByCodeContaining(query);
+        Map<Long, CategoryDTO> combinedMap = Stream.concat(categoriesByName.stream(), categoriesByCode.stream())
+                .collect(Collectors.toMap(CategoryDTO::getId, category -> category, (existing, replacement) -> existing));
+
+        return new ArrayList<>(combinedMap.values());
     }
 
-    @Override
-    public List<CategoryDTO> findByCodeContaining(String code) {
+    private List<CategoryDTO> findByNameContaining(String name) {
+        Optional<List<Category>> categories = categoryRepository.findByNameContaining(name);
+        return categories.map(categoryList ->
+                categoryList.stream()
+                        .map(category -> {
+                            CategoryDTO categoryDTO = mapToCategoryDTO(category);
+                            categoryDTO.setProductsAmount(categoryRepository.countProductsByCategory(category.getId()));
+                            return categoryDTO;
+                        })
+                        .toList()
+        ).orElse(Collections.emptyList());
+    }
+
+    private List<CategoryDTO> findByCodeContaining(String code) {
         Optional<List<Category>> categories = categoryRepository.findByCodeContaining(code);
-        return categories.map(categoryList -> categoryList.stream().map(this::mapToCategoryDTO).toList()).orElse(null);
+        return categories.map(categoryList ->
+                categoryList.stream()
+                        .map(category -> {
+                            CategoryDTO categoryDTO = mapToCategoryDTO(category);
+                            categoryDTO.setProductsAmount(categoryRepository.countProductsByCategory(category.getId()));
+                            return categoryDTO;
+                        })
+                        .toList()
+        ).orElse(Collections.emptyList());
     }
 
     @Override

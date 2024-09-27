@@ -20,7 +20,7 @@
     </div>
 
     <h2 class="mt-5">Editar Categoría</h2>
-    <form th:action="@{/categories/edit}" method="post" th:object="${category}" enctype="multipart/form-data">
+    <form th:action="@{/categories/update}" method="post" th:object="${category}" enctype="multipart/form-data">
         <input type="hidden" th:name="id" th:value="${category.id}" />
 
         <div class="form-group">

@@ -69,6 +69,12 @@ public class ProductServiceImpl implements IProductService {
         productRepository.deleteById(id);
     }
 
+    @Override
+    public List<ProductDTO> searchProduct(String query) {
+        List<Product> products = productRepository.findByNameContaining(query);
+        return products.stream().map(this::mapToProductDTO).toList();
+    }
+
     private ProductDTO mapToProductDTO(Product product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());

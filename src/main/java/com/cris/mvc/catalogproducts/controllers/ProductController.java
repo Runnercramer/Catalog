@@ -92,4 +92,11 @@ public class ProductController {
         productService.deleteProduct(id);
         return "redirect:/products";
     }
+
+    @GetMapping("/products/search")
+    public String searchProduct(@RequestParam("query") String query, Model model){
+        List<ProductDTO> products = productService.searchProduct(query);
+        model.addAttribute("products", products);
+        return "/products";
+    }
 }
